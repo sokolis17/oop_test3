@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ООП В PHP - НЕДЕЛЯ 3: ИНТЕРФЕЙСЫ И ТРЕЙТЫ
  * 
@@ -37,53 +38,56 @@ echo "--- ЗАДАНИЕ 1: Базовые интерфейсы (15 баллов
  */
 
 // ТВОЙ КОД ЗДЕСЬ:
-interface Drawable {
+interface Drawable
+{
     public function draw();
 }
 
-class Square implements Drawable {
+class Square implements Drawable
+{
     private $size;
 
     public function __construct($size)
-        {
-            $this -> size = $size;
-        }
+    {
+        $this->size = $size;
+    }
     public function draw()
-        {
-            return "Рисую квадрат размером {$this->size}";
-        }
+    {
+        return "Рисую квадрат размером {$this->size}";
+    }
 }
 
-class Circle implements Drawable {
-    
+class Circle implements Drawable
+{
+
     private $radius;
 
     public function __construct($radius)
-        {
-            $this -> radius = $radius;
-        }
+    {
+        $this->radius = $radius;
+    }
     public function draw()
-        {
-            return "Рисую круг радиусом {$this->radius}";
-        }
+    {
+        return "Рисую круг радиусом {$this->radius}";
+    }
 }
 
 // Проверка:
 try {
     $square = new Square(10);
     $circle = new Circle(5);
-    
+
     $tests = [
         'square_draw' => $square->draw() === "Рисую квадрат размером 10",
         'circle_draw' => $circle->draw() === "Рисую круг радиусом 5",
         'square_is_drawable' => $square instanceof Drawable,
         'circle_is_drawable' => $circle instanceof Drawable
     ];
-    
+
     // Проверка что Drawable это интерфейс
     $reflection = new ReflectionClass('Drawable');
     $tests['is_interface'] = $reflection->isInterface();
-    
+
     if (array_sum($tests) === count($tests)) {
         echo "✓ Задание 1 выполнено!\n\n";
     } else {
@@ -116,32 +120,38 @@ echo "--- ЗАДАНИЕ 2: Множественная реализация (20 
  */
 
 // ТВОЙ КОД ЗДЕСЬ:
-interface Movable {
+interface Movable
+{
     public function move();
     public function stop();
 }
 
-interface Soundable {
+interface Soundable
+{
     public function makeSound();
 }
 
-class Car implements Movable, Soundable {
+class Car implements Movable, Soundable
+{
     private $brand;
 
     public function __construct($brand)
-        {
-            $this->brand = $brand;
-        }
+    {
+        $this->brand = $brand;
+    }
 
-    public function move(){
+    public function move()
+    {
         return "{$this->brand} едет";
     }
 
-    public function stop(){
+    public function stop()
+    {
         return "{$this->brand} остановился";
     }
 
-    public function makeSound(){
+    public function makeSound()
+    {
         return "{$this->brand} сигналит: Бип-бип!";
     }
 }
@@ -149,7 +159,7 @@ class Car implements Movable, Soundable {
 // Проверка:
 try {
     $car = new Car("Toyota");
-    
+
     $tests = [
         'move' => $car->move() === "Toyota едет",
         'stop' => $car->stop() === "Toyota остановился",
@@ -157,7 +167,7 @@ try {
         'is_movable' => $car instanceof Movable,
         'is_soundable' => $car instanceof Soundable
     ];
-    
+
     if (array_sum($tests) === count($tests)) {
         echo "✓ Задание 2 выполнено!\n\n";
     } else {
@@ -185,25 +195,27 @@ echo "--- ЗАДАНИЕ 3: Интерфейсы с константами (15 �
  */
 
 // ТВОЙ КОД ЗДЕСЬ:
-interface Logger {
+interface Logger
+{
     public const LEVEL_INFO = "INFO";
     public const LEVEL_WARNING = "WARNING";
     public const LEVEL_ERROR = "ERROR";
 
-    public function log($level,$message);
+    public function log($level, $message);
 }
 
-class FileLogger implements Logger {
+class FileLogger implements Logger
+{
     public function log($level, $message)
-        {
-            return "[{$level}] {$message}";
-        }
+    {
+        return "[{$level}] {$message}";
+    }
 }
 
 // Проверка:
 try {
     $logger = new FileLogger();
-    
+
     $tests = [
         'info_constant' => Logger::LEVEL_INFO === "INFO",
         'warning_constant' => Logger::LEVEL_WARNING === "WARNING",
@@ -212,7 +224,7 @@ try {
         'log_error' => $logger->log(Logger::LEVEL_ERROR, "Ошибка!") === "[ERROR] Ошибка!",
         'is_logger' => $logger instanceof Logger
     ];
-    
+
     if (array_sum($tests) === count($tests)) {
         echo "✓ Задание 3 выполнено!\n\n";
     } else {
@@ -247,35 +259,41 @@ echo "--- ЗАДАНИЕ 4: Базовые трейты (20 баллов) ---\n"
  */
 
 // ТВОЙ КОД ЗДЕСЬ:
-trait Timestampable {
+trait Timestampable
+{
     private $createdAt;
     private $updatedAt;
 
-    public function setCreatedAt($time){
+    public function setCreatedAt($time)
+    {
         $this->createdAt = $time;
     }
-    public function setUpdatedAt($time){
+    public function setUpdatedAt($time)
+    {
         $this->updatedAt = $time;
     }
-    public function getCreatedAt(){
+    public function getCreatedAt()
+    {
         return $this->createdAt;
     }
-    public function getUpdatedAt(){
+    public function getUpdatedAt()
+    {
         return $this->updatedAt;
     }
-    
 }
 
 
-class Post {
+class Post
+{
     use Timestampable;
     private $title;
 
     public function __construct($title)
-        {
-            $this->title=$title;
-        }
-    public function getTitle(){
+    {
+        $this->title = $title;
+    }
+    public function getTitle()
+    {
         return $this->title;
     }
 }
@@ -285,17 +303,17 @@ try {
     $post = new Post("Заголовок поста");
     $post->setCreatedAt("2024-01-01 10:00:00");
     $post->setUpdatedAt("2024-01-02 15:30:00");
-    
+
     $tests = [
         'title' => $post->getTitle() === "Заголовок поста",
         'created_at' => $post->getCreatedAt() === "2024-01-01 10:00:00",
         'updated_at' => $post->getUpdatedAt() === "2024-01-02 15:30:00"
     ];
-    
+
     // Проверка что Timestampable это трейт
     $reflection = new ReflectionClass('Timestampable');
     $tests['is_trait'] = $reflection->isTrait();
-    
+
     if (array_sum($tests) === count($tests)) {
         echo "✓ Задание 4 выполнено!\n\n";
     } else {
@@ -326,41 +344,47 @@ echo "--- ЗАДАНИЕ 5: Множественные трейты (20 балл
  */
 
 // ТВОЙ КОД ЗДЕСЬ:
-trait Loggable {
-    public function log($message){
-    return "[LOG] {$message}";
+trait Loggable
+{
+    public function log($message)
+    {
+        return "[LOG] {$message}";
     }
 }
 
-trait Validatable {
-    public function validate(){
+trait Validatable
+{
+    public function validate()
+    {
         return true;
     }
 }
 
-class User {
+class User
+{
     use Loggable, Validatable;
-    
+
     private $email;
     public function __construct($email)
-        {
-            $this->email = $email;
-        }
-    public function getEmail(){
+    {
+        $this->email = $email;
+    }
+    public function getEmail()
+    {
         return $this->email;
-    }    
+    }
 }
 
 // Проверка:
 try {
     $user = new User("user@test.com");
-    
+
     $tests = [
         'email' => $user->getEmail() === "user@test.com",
         'log' => $user->log("Пользователь создан") === "[LOG] Пользователь создан",
         'validate' => $user->validate() === true
     ];
-    
+
     if (array_sum($tests) === count($tests)) {
         echo "✓ Задание 5 выполнено!\n\n";
     } else {
@@ -393,31 +417,51 @@ echo "--- ЗАДАНИЕ 6: Разрешение конфликтов трейт
  */
 
 // ТВОЙ КОД ЗДЕСЬ:
-trait EmailFormatter {
-    // Твой код
-}
-
-trait SmsFormatter {
-    // Твой код
-}
-
-class Message {
-    use EmailFormatter, SmsFormatter {
-        // Здесь разреши конфликт
+trait EmailFormatter
+{
+    public function format($text)
+    {
+        return "Email: {$text}";
     }
-    // Твой код
+}
+
+trait SmsFormatter
+{
+    public function format($text)
+    {
+        return "SMS: {$text}";
+    }
+}
+
+class Message
+{
+    use EmailFormatter, SmsFormatter {
+        EmailFormatter::format insteadof SmsFormatter;
+        EmailFormatter::format as formatEmail;
+        SmsFormatter::format as formatSms;
+    }
+    private $content;
+
+    public function __construct($content)
+    {
+        $this->content = $content;
+    }
+    public function getContent()
+    {
+        return $this->content;
+    }
 }
 
 // Проверка:
 try {
     $message = new Message("Привет!");
-    
+
     $tests = [
         'content' => $message->getContent() === "Привет!",
         'email_format' => $message->formatEmail("Тест") === "Email: Тест",
         'sms_format' => $message->formatSms("Тест") === "SMS: Тест"
     ];
-    
+
     if (array_sum($tests) === count($tests)) {
         echo "✓ Задание 6 выполнено!\n\n";
     } else {
@@ -453,45 +497,66 @@ echo "--- ЗАДАНИЕ 7: Интерфейсы + Трейты (25 баллов
  */
 
 // ТВОЙ КОД ЗДЕСЬ:
-interface Serializable {
-    // Твой код
+interface MySerializable
+{
+    public function toArray();
+    public function toJson();
 }
 
-trait JsonSerializable {
-    // Твой код
-}
-
-class Product implements Serializable {
-    use JsonSerializable;
-    // Твой код
-}
-
-// Проверка:
-try {
-    $product = new Product("Ноутбук", 50000);
-    
-    $array = $product->toArray();
-    $json = $product->toJson();
-    
-    $tests = [
-        'array_name' => $array['name'] === "Ноутбук",
-        'array_price' => $array['price'] === 50000,
-        'json_valid' => json_decode($json, true) === $array,
-        'is_serializable' => $product instanceof Serializable
-    ];
-    
-    if (array_sum($tests) === count($tests)) {
-        echo "✓ Задание 7 выполнено!\n\n";
-    } else {
-        echo "✗ Не все тесты пройдены:\n";
-        foreach ($tests as $test => $result) {
-            echo ($result ? "✓" : "✗") . " $test\n";
-        }
-        echo "\n";
+trait JsonSerializable
+{
+    public abstract function toArray(); 
+    public function toJson()
+    {
+        return json_encode($this->toArray());
     }
-} catch (Exception $e) {
-    echo "✗ Ошибка: " . $e->getMessage() . "\n\n";
 }
+
+class Product implements MySerializable
+{
+    private $name;
+    private $price;
+
+    use JsonSerializable;
+
+    public function __construct($name, $price)
+    {
+        $this->name = $name;
+        $this->price = $price;
+    }
+
+    public function toArray()
+    {
+        return [
+            "name" => $this->name,
+            "price" => $this->price
+        ];
+    }
+}
+
+// Проверка
+$product = new Product("Ноутбук", 50000);
+
+$array = $product->toArray();
+$json = $product->toJson();
+
+$tests = [
+    'array_name' => $array['name'] === "Ноутбук",
+    'array_price' => $array['price'] === 50000,
+    'json_valid' => json_decode($json, true) === $array,
+    'is_serializable' => $product instanceof MySerializable
+];
+
+if (array_sum($tests) === count($tests)) {
+    echo "✓ Задание 7 выполнено!\n\n";
+} else {
+    echo "✗ Не все тесты пройдены:\n";
+    foreach ($tests as $test => $result) {
+        echo ($result ? "✓" : "✗") . " $test\n";
+    }
+    echo "\n";
+}
+
 
 // ============================================
 // ИТОГОВОЕ ЗАДАНИЕ НЕДЕЛИ 3
@@ -544,33 +609,129 @@ echo "--- ИТОГОВОЕ ЗАДАНИЕ: CMS система (40 баллов) 
  */
 
 // ТВОЙ КОД ЗДЕСЬ:
-interface Publishable {
-    // Твой код
+interface Publishable
+{
+    public function publish();
+    public function unpublish();
+    public function isPublished();
 }
 
-trait Timestampable {
-    // Можешь скопировать из задания 4 или написать заново
+trait Timestampable
+{
+    private $createdAt;
+    private $updatedAt;
+
+    public function setCreatedAt($time)
+    {
+        $this->createdAt = $time;
+    }
+    public function setUpdatedAt($time)
+    {
+        $this->updatedAt = $time;
+    }
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
 }
 
-trait Sluggable {
-    // Твой код
+trait Sluggable
+{
+    private $slug;
+
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+    public function generateSlug($text)
+    {
+        $res = strtolower(str_replace(" ", "-", $text));
+        return $res;
+    }
 }
 
-abstract class Content implements Publishable {
+abstract class Content implements Publishable
+{
     use Timestampable, Sluggable;
-    // Твой код
+    protected $title;
+    protected bool $isPublished = false;
+    public function __construct($title)
+    {
+        $this->title = $title;
+    }
+    public function publish()
+    {
+        return $this->isPublished = true;
+    }
+    public function unpublish()
+    {
+        return $this->isPublished = false;
+    }
+    public function isPublished()
+    {
+        return $this->isPublished;
+    }
+    public function getTitle()
+    {
+        return $this->title;
+    }
+    public abstract function getType();
 }
 
-class Article extends Content {
-    // Твой код
+class Article extends Content
+{
+    private $body;
+
+    public function __construct($title, $body)
+    {
+        parent::__construct($title);
+        $this->body = $body;
+    }
+    public function getType()
+    {
+        return "article";
+    }
+    public function getBody()
+    {
+        return $this->body;
+    }
 }
 
-class Page extends Content {
-    // Твой код
+class Page extends Content
+{
+    private $content;
+
+    public function __construct($title, $content)
+    {
+        parent::__construct($title);
+        $this->content = $content;
+    }
+    public function getType()
+    {
+        return "page";
+    }
+    public function getContent()
+    {
+        return $this->content;
+    }
 }
 
-function publishContent($items) {
-    // Твой код
+function publishContent($items)
+{
+    $arr = [];
+    foreach ($items as $item) {
+        $item->publish();
+        $arr[] = $item->getTitle();
+    }
+    return $arr;
 }
 
 // Проверка:
@@ -578,37 +739,38 @@ try {
     $article = new Article("Новая статья", "Текст статьи");
     $article->setCreatedAt("2024-01-01");
     $article->setSlug($article->generateSlug("Новая статья"));
-    
+
     $page = new Page("О нас", "Информация о компании");
     $page->setCreatedAt("2024-01-02");
-    
+
     $tests = [
         'article_title' => $article->getTitle() === "Новая статья",
         'article_body' => $article->getBody() === "Текст статьи",
         'article_type' => $article->getType() === "article",
         'article_not_published' => $article->isPublished() === false,
-        
+
         'page_title' => $page->getTitle() === "О нас",
         'page_content' => $page->getContent() === "Информация о компании",
         'page_type' => $page->getType() === "page",
-        
+
         'slug_generated' => $article->getSlug() === "новая-статья",
         'created_at' => $article->getCreatedAt() === "2024-01-01"
     ];
-    
+
     $article->publish();
     $tests['article_published'] = $article->isPublished() === true;
-    
+
     $article->unpublish();
     $tests['article_unpublished'] = $article->isPublished() === false;
-    
+
     $titles = publishContent([$article, $page]);
-    $tests['publish_function'] => $titles === ["Новая статья", "О нас"];
+    $tests['publish_function'] = $titles === ["Новая статья", "О нас"];
     $tests['all_published'] = $article->isPublished() && $page->isPublished();
-    
+
+
     $tests['article_is_publishable'] = $article instanceof Publishable;
     $tests['article_is_content'] = $article instanceof Content;
-    
+
     if (array_sum($tests) === count($tests)) {
         echo "✓ ИТОГОВОЕ ЗАДАНИЕ выполнено! Превосходная работа!\n\n";
     } else {
@@ -672,4 +834,3 @@ echo "Готов к Неделе 4: Продвинутые темы ООП!\n";
  * - В generateSlug: return strtolower(str_replace(" ", "-", $text));
  * - publishContent: цикл foreach, вызывай publish() для каждого
  */
-?>
